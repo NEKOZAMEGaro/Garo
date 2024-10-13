@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QRコード生成器</title>
+</head>
+<body>
+    <h1>QRコード生成器</h1>
+    <form action="/generate_qr" method="POST">
+        <label for="data">QRコードにしたいデータ:</label>
+        <input type="text" id="data" name="data" required>
+        <button type="submit">生成</button>
+    </form>
+    
+    {% if qr_code_path %}
+    <h2>生成されたQRコード:</h2>
+    <img src="{{ qr_code_path }}" alt="QRコード">
+    {% endif %}
+</body>
+</html>
