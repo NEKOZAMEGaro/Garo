@@ -1,15 +1,28 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, send_file
 import qrcode
-import os
 
 app = Flask(__name__)
 
+@app.route('/')
+def index():
+    # シンプルなフォームを返す
+    return '''
+        <form action="/generate" method="post">
+            <input type="text" name="data" placeholder="QRコードにしたいデータ">
+            <button type="submit">生成</button>
+        </form>
+    '''
+
 @app.route('/generate', methods=['POST'])
 def generate_qr():
-    data = request.json.get('data')
-    img = qrcode.make(data)
-    img.save('qr_code.png')
-    return jsonify({'message': 'QR code generated!'})
+    data = request.form['data']
+    
+    # QRコード生成
+    qr_img = qrcode.make(data)
+    qr_img.save("qr_code.png")
+    
+    # 生成されたQRコード画像を返す
+    return send_file("qr_code.png", mimetype='image/png')
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 8000)))
+    app.run(debug=True, port=10000)
